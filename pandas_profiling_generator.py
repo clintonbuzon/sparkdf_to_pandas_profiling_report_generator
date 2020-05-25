@@ -44,4 +44,4 @@ pandas_df.info()
 
 # Generate pandas profiling report
 prof = ProfileReport(pandas_df, title='Pandas Profiling Report for {}'.format(report_name), explorative=True)
-prof.to_file(output_file=report_name)
+prof.to_file(output_file='sample_output/{}'.format(report_name))
