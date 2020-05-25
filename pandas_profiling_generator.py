@@ -16,7 +16,7 @@ if len(sys.argv) < 3:
 	
 # Set input parameters as variables
 source_data = sys.argv[1]
-report_name = "{}_{}.{}".format(sys.argv[2],datetime.today().strftime('%Y%m%d%H%M%S'))
+report_name = "{}_{}.{}".format(sys.argv[2],datetime.today().strftime('%Y%m%d%H%M%S'),'html')
 
 # Create spark session
 spark = SparkSession.builder \
