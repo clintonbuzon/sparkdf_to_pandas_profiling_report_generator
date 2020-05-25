@@ -6,6 +6,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql import SQLContext
 from pandas_profiling import ProfileReport
 
+# Check if enough parameters were passed during execution
 if len(sys.argv) < 3:
     print("No parametres specified") 
     print("Parameter 1: source file name") 
@@ -13,11 +14,11 @@ if len(sys.argv) < 3:
     print("Example: {} '/Users/clintonbuzon/Downloads/sra_postpaid/unit/pxn_sync_dt=2020-01' SRA".format(sys.argv[0]))
     exit(0)
 	
+# Set input parameters as variables
 source_data = sys.argv[1]
 report_name = "{}_{}.{}".format(sys.argv[2],datetime.today().strftime('%Y%m%d%H%M%S'))
-source_data = '/Users/clintonbuzon/Downloads/voicesms_forecast_20200428/voicesms_forecast_0_201911'
-report_name = "{}_{}.{}".format('voicesms_forecast',datetime.today().strftime('%Y%m%d%H%M%S'),'html')
 
+# Create spark session
 spark = SparkSession.builder \
     .master('local') \
     .appName('myAppName') \
@@ -28,16 +29,19 @@ spark = SparkSession.builder \
 sc = spark.sparkContext
 sqlContext = SQLContext(sc)
 
-# to read parquet file as spark dataframe
+# To read parquet file as spark dataframe
 df = sqlContext.read.parquet(source_data)
 print("Spark Dataframe")
 df.printSchema()
 
-# convert spark dataframe to pandas dataframe
+# Convert spark dataframe to pandas dataframe
 print("Pandas Dataframe")
 pandas_df = df.toPandas()
+
+# Replace all blank balues as np.nan, this provides pandas_profiling better picture on the data when checking for missing values
+pandas_df.replace("", np.nan, inplace=True)
 pandas_df.info()
 
-# generate pandas profiling report
+# Generate pandas profiling report
 prof = ProfileReport(pandas_df)
 prof.to_file(output_file=report_name)
