@@ -68,14 +68,17 @@ Example:
 
 ```python
 if report_name[:-20] == 'voicesms_forecast':
+    # Spark Datasets
     totalSmsCount = df.groupBy("segment").agg(f.sum('totalSmsCount').cast("Decimal(30,2)").alias("sum(totalSmsCount)"))
     totalCallDuration = df.groupBy("segment").agg(f.sum('totalCallDuration').cast("Decimal(30,2)").alias("sum(totalCallDuration)"))
     
+    # Compile allspark datasets to spark_dataset_list
     spark_dataset_list = []
     spark_dataset1 = {'data':totalSmsCount,'title':'Total SMS per segment'}
     spark_dataset2 = {'data':totalCallDuration,'title':'Total Voice per segment'}
     spark_dataset_list.append(spark_dataset1)
     spark_dataset_list.append(spark_dataset2)
     
+    # Pass spark_dataset_list to report generation function
     generateCustomValidations(report_full_path, spark_dataset_list)
 ```
