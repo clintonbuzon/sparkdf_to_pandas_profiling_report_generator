@@ -39,7 +39,7 @@ Pandas profiling is usually being used for Exploratory Data Analysis (EDA). This
 
 We have 2 types of pyspark scripts.
 - `pandas_profiling_generator.py`
-- `pandas_profiling_generator_with_custom_validations.py`
+- `pandas_profiling_generator_with_validations.py`
 
 Both accepts 2 parameters,
 1. source data - full path of directory containing parquet files
@@ -50,8 +50,14 @@ Scripts are passed to `spark-submit` when being executed.
 ### Example
 
 #### regular pandas profiling report
-`spark-submit pandas_profiling_generator.py /Users/clintonbuzon/Downloads/source_data/latentDemand_fourG latentDemand_fourG`
+```bash
+spark-submit pandas_profiling_generator.py /Users/clintonbuzon/Downloads/source_data/latentDemand_fourG latentDemand_fourG
+```
 
 #### report with custom validations
 
 `spark-submit pandas_profiling_generator_with_validations.py /Users/clintonbuzon/Downloads/voicesms_forecast_0_201911 voicesms_forecast`
+
+## How to add custom validations
+
+### Add new code block on the bottow of `pandas_profiling_generator_with_validations.py`
