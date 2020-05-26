@@ -16,7 +16,9 @@ if len(sys.argv) < 3:
 	
 # Set input parameters as variables
 source_data = sys.argv[1]
+report_dir = "sample_output"
 report_name = "{}_{}.{}".format(sys.argv[2],datetime.today().strftime('%Y%m%d%H%M%S'),'html')
+report_full_path = "{}/{}".format(report_dir,report_name)
 
 # Create spark session
 spark = SparkSession.builder \
@@ -44,5 +46,5 @@ pandas_df.info()
 
 # Generate pandas profiling report
 prof = ProfileReport(pandas_df, title='Pandas Profiling Report for {}'.format(report_name), explorative=True)
-prof.to_file(output_file='sample_output/{}'.format(report_name))
+prof.to_file(output_file=report_full_path)
 
