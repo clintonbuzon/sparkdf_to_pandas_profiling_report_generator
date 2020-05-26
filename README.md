@@ -39,7 +39,7 @@ Pandas profiling is usually being used for Exploratory Data Analysis (EDA). This
 
 We have 2 types of pyspark scripts.
 - `pandas_profiling_generator.py`
-- `pandas_profiling_generator_with_custom_validations.py`
+- `pandas_profiling_generator_with_validations.py`
 
 Both accepts 2 parameters,
 1. source data - full path of directory containing parquet files
@@ -47,7 +47,38 @@ Both accepts 2 parameters,
 
 Scripts are passed to `spark-submit` when being executed.
 
-###Example
+### Example
 
-`spark-submit pandas_profiling_generator.py '/Users/clintonbuzon/Downloads/voicesms_forecast_20200428/voicesms_forecast_0_201911' voicesms_forecast`
+#### regular pandas profiling report
+```bash
+spark-submit pandas_profiling_generator.py /Users/clintonbuzon/Downloads/source_data/latentDemand_fourG latentDemand_fourG
+```
 
+#### report with custom validations
+
+```bash
+spark-submit pandas_profiling_generator_with_validations.py /Users/clintonbuzon/Downloads/voicesms_forecast_0_201911 voicesms_forecast
+```
+
+## How to add custom validations
+
+### Add new code block on the bottom of pandas_profiling_generator_with_validations.py
+
+Example:
+
+```python
+if report_name[:-20] == 'voicesms_forecast':
+    # Spark Datasets
+    totalSmsCount = df.groupBy("segment").agg(f.sum('totalSmsCount').cast("Decimal(30,2)").alias("sum(totalSmsCount)"))
+    totalCallDuration = df.groupBy("segment").agg(f.sum('totalCallDuration').cast("Decimal(30,2)").alias("sum(totalCallDuration)"))
+    
+    # Compile allspark datasets to spark_dataset_list
+    spark_dataset_list = []
+    spark_dataset1 = {'data':totalSmsCount,'title':'Total SMS per segment'}
+    spark_dataset2 = {'data':totalCallDuration,'title':'Total Voice per segment'}
+    spark_dataset_list.append(spark_dataset1)
+    spark_dataset_list.append(spark_dataset2)
+    
+    # Pass spark_dataset_list to report generation function
+    generateCustomValidations(report_full_path, spark_dataset_list)
+```
