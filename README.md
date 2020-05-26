@@ -47,7 +47,11 @@ Both accepts 2 parameters,
 
 Scripts are passed to `spark-submit` when being executed.
 
-###Example
+### Example
 
-`spark-submit pandas_profiling_generator.py '/Users/clintonbuzon/Downloads/voicesms_forecast_20200428/voicesms_forecast_0_201911' voicesms_forecast`
+#### regular pandas profiling report
+`spark-submit pandas_profiling_generator.py /Users/clintonbuzon/Downloads/source_data/latentDemand_fourG latentDemand_fourG`
 
+#### report with custom validations
+
+`spark-submit pandas_profiling_generator_with_validations.py /Users/clintonbuzon/Downloads/voicesms_forecast_0_201911 voicesms_forecast`
