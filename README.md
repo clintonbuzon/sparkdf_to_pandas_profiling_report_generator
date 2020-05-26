@@ -56,8 +56,26 @@ spark-submit pandas_profiling_generator.py /Users/clintonbuzon/Downloads/source_
 
 #### report with custom validations
 
-`spark-submit pandas_profiling_generator_with_validations.py /Users/clintonbuzon/Downloads/voicesms_forecast_0_201911 voicesms_forecast`
+```bash
+spark-submit pandas_profiling_generator_with_validations.py /Users/clintonbuzon/Downloads/voicesms_forecast_0_201911 voicesms_forecast
+```
 
 ## How to add custom validations
 
-### Add new code block on the bottow of `pandas_profiling_generator_with_validations.py`
+### Add new code block on the bottom of pandas_profiling_generator_with_validations.py
+
+Example:
+
+```python
+if report_name[:-20] == 'voicesms_forecast':
+    totalSmsCount = df.groupBy("segment").agg(f.sum('totalSmsCount').cast("Decimal(30,2)").alias("sum(totalSmsCount)"))
+    totalCallDuration = df.groupBy("segment").agg(f.sum('totalCallDuration').cast("Decimal(30,2)").alias("sum(totalCallDuration)"))
+    
+    spark_dataset_list = []
+    spark_dataset1 = {'data':totalSmsCount,'title':'Total SMS per segment'}
+    spark_dataset2 = {'data':totalCallDuration,'title':'Total Voice per segment'}
+    spark_dataset_list.append(spark_dataset1)
+    spark_dataset_list.append(spark_dataset2)
+    
+    generateCustomValidations(report_full_path, spark_dataset_list)
+```
