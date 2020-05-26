@@ -1,14 +1,8 @@
-# Generate Pandas Profiling Report using Spark Dataframe as input
+# Generate Pandas Profiling Report using Spark Dataframe
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce interdum rutrum arcu placerat volutpat. Nulla rutrum ipsum eu consequat interdum. Nam sem ex, vehicula non scelerisque ut, pharetra nec risus. Fusce id vestibulum ex. Nam lacus mauris, cursus eu felis at, eleifend lobortis leo. Sed auctor, tortor id iaculis lacinia, sapien magna imperdiet urna, ac molestie velit nisi ac ante. Nullam sed imperdiet purus, ac viverra velit. Cras quam sapien, egestas eget convallis vitae, tempor vitae elit.
+Simple pyspark application which takes spark dataframe as input and automatically converts it to pandas dataframe, then generate pandas profiling report in html format.
 
-```mermaid
-graph LR
-A[Square Rect] -- Link text --> B((Circle))
-A --> C(Round Rect)
-B --> D{Rhombus}
-C --> D
-```
+Pandas profiling is usually being used for Exploratory Data Analysis (EDA). This provides us quick insights to our dataset, which we sometimes miss, or did not think about.
 
 ## Prerequisites
 
@@ -37,4 +31,23 @@ C --> D
 
 [**pandas_profiling**](https://github.com/pandas-profiling/pandas-profiling) generates profile reports from a pandas `DataFrame`. The pandas `df.describe()` function is great but a little basic for serious exploratory data analysis. `pandas_profiling` extends the pandas DataFrame with `df.profile_report()` for quick data analysis. This also allows us to create an output html report using `to_file(output_file=output.html)`
 
+#### bs4 (also known as Beautiful soup)
+
+[**Beautiful Soup**](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)  is a Python library for pulling data out of HTML and XML files. It works with your favorite parser to provide idiomatic ways of navigating, searching, and modifying the parse tree. It is commonly used for html parsing, manipulation and web scraping. We will use this to append new data on default pandas profiling html report.
+
 ## Usage
+
+We have 2 types of pyspark scripts.
+- `pandas_profiling_generator.py`
+- `pandas_profiling_generator_with_custom_validations.py`
+
+Both accepts 2 parameters,
+1. source data - full path of directory containing parquet files
+2. report name - name or title of report, which we can also use to add custom validations
+
+Scripts are passed to `spark-submit` when being executed.
+
+###Example
+
+`spark-submit pandas_profiling_generator.py '/Users/clintonbuzon/Downloads/voicesms_forecast_20200428/voicesms_forecast_0_201911' voicesms_forecast`
+
