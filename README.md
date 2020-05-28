@@ -51,13 +51,13 @@ Scripts are passed to `spark-submit` when being executed.
 
 #### regular pandas profiling report
 ```bash
-spark-submit pandas_profiling_generator.py /Users/clintonbuzon/Downloads/source_data/latentDemand_fourG latentDemand_fourG
+spark-submit pandas_profiling_generator.py <source file> <report name>
 ```
 
 #### report with custom validations
 
 ```bash
-spark-submit pandas_profiling_generator_with_validations.py /Users/clintonbuzon/Downloads/voicesms_forecast_0_201911 voicesms_forecast
+spark-submit pandas_profiling_generator_with_validations.py <source file> <report name>
 ```
 
 ## How to add custom validations
